@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CulinaryGuide.Pages.MapPage"
+             Title="Restaurant Map">
+
+    <Grid>
+        <!-- 静态地图图片 -->
+        <Image Source="map_placeholder.png" Aspect="AspectFill" />
+
+        <!-- 返回按钮 -->
+        <Button Text="Back to List"
+                HorizontalOptions="Center"
+                VerticalOptions="End"
+                Margin="0,0,0,20"
+                BackgroundColor="LightBlue"
+                TextColor="Black"
+                CornerRadius="20"
+                WidthRequest="150"
+                Clicked="BackButton_Clicked" />
+    </Grid>
+</ContentPage>

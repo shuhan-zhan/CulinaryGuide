@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="CulinaryGuide.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:CulinaryGuide.Pages"
+    Shell.FlyoutBehavior="Disabled">
+
+    <TabBar>
+        <ShellContent Title="Home" Route="main" ContentTemplate="{DataTemplate local:MainPage}" />
+        <ShellContent Title="Favorites" Route="favorites" ContentTemplate="{DataTemplate local:FavoritesPage}" />
+    </TabBar>
+
+    <!-- 移除原来的详情页和地图页 ShellContent，改用代码注册路由 -->
+    <ShellContent Title="Map" Route="map" ContentTemplate="{DataTemplate local:MapPage}" />
+</Shell>

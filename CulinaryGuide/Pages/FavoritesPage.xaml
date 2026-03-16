@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CulinaryGuide.Pages.FavoritesPage"
+             Title="Favorites">
+
+    <Grid>
+        <CollectionView x:Name="FavoritesCollectionView"
+                        ItemsSource="{Binding Favorites}"
+                        Margin="10"
+                        EmptyView="No favorite restaurants yet">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Remove" 
+                                           BackgroundColor="LightCoral"
+                                           Invoked="OnRemoveSwipeInvoked" />
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+
+                        <Frame Padding="10" Margin="0,5" CornerRadius="15" BorderColor="LightGray" HasShadow="False">
+                            <Grid ColumnDefinitions="80, *" RowDefinitions="Auto, Auto">
+                                <!-- 餐厅图片：用 Frame 实现圆角 -->
+                                <Frame Grid.RowSpan="2"
+                                       WidthRequest="70" HeightRequest="70"
+                                       CornerRadius="10" Padding="0"
+                                       HasShadow="False"
+                                       HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Image Source="{Binding ImageUrl}"
+                                           Aspect="AspectFill"
+                                           WidthRequest="70" HeightRequest="70" />
+                                </Frame>
+
+                                <!-- 餐厅名称 -->
+                                <Label Grid.Column="1"
+                                       Text="{Binding Name}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       Margin="5,0" />
+
+                                <!-- 简短地址 -->
+                                <Label Grid.Row="1" Grid.Column="1"
+                                       Text="{Binding ShortAddress}"
+                                       TextColor="Gray"
+                                       FontSize="12"
+                                       Margin="5,0" />
+                            </Grid>
+                        </Frame>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
