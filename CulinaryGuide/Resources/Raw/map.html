@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Restaurant Map</title>
+    <style>
+        html, body, #container {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <img id="mapImage" style="width:100%; height:100%;" />
+    </div>
+    <script>
+        // 高德 Web 服务 API Key（请替换为你自己的有效 Key）
+        var API_KEY = '5e0ff870af7117e34a2a9c18f4835b64';
+
+        // 餐厅标记坐标（经度,纬度），与项目中数据保持一致
+        var restaurants = [
+            { name: "DaDong Roast Duck", lng: 116.4116, lat: 39.9108 },
+            { name: "Starbucks", lng: 116.4122, lat: 39.9078 },
+            { name: "McDonald's", lng: 116.4140, lat: 39.9085 }
+        ];
+
+        // 计算中心点（取平均值）
+        var centerLng = (116.4074 + 116.4074 + 116.4084) / 3;
+        var centerLat = (39.9042 + 39.9052 + 39.9042) / 3;
+
+        // 构建 markers 参数（格式：mid,颜色,标签:经度,纬度）
+        var markers = restaurants.map(function (r, idx) {
+            var label = String.fromCharCode(65 + idx); // A, B, C
+            return 'mid,0xFF0000,' + label + ':' + r.lng + ',' + r.lat;
+        }).join('|');
+
+        // 构建静态地图 URL（经度在前，纬度在后）
+        var mapUrl = 'https://restapi.amap.com/v3/staticmap?location=' + centerLng + ',' + centerLat +
+            '&zoom=16&size=800*600&markers=' + markers + '&key=' + API_KEY;
+
+        // 加载图片
+        document.getElementById('mapImage').src = mapUrl;
+    </script>
+</body>
+</html>

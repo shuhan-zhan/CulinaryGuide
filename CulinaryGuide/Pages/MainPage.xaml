@@ -1,16 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:CulinaryGuide.Converters"
              x:Class="CulinaryGuide.Pages.MainPage"
              Title="Nearby Food"
              Shell.NavBarIsVisible="True">
 
+    <ContentPage.Resources>
+        <converters:FavoriteTextConverter x:Key="FavoriteTextConverter" />
+        <converters:FavoriteColorConverter x:Key="FavoriteColorConverter" />
+    </ContentPage.Resources>
+
     <Grid RowDefinitions="Auto, Auto, *">
-        <!-- 顶部定位条（使用文字代替图标） -->
+        <!-- 顶部定位条 -->
         <VerticalStackLayout Grid.Row="0" Padding="10">
             <Label Text="Current Location：" FontSize="14" TextColor="Gray" />
             <HorizontalStackLayout>
-                <!-- 动态显示当前位置的标签 -->
                 <Label x:Name="CurrentLocationText" 
                        Text="Getting location..." 
                        FontSize="18" 
@@ -23,11 +28,14 @@
             </HorizontalStackLayout>
         </VerticalStackLayout>
 
-        <!-- 搜索栏（使用 Emoji 代替搜索图标） -->
+        <!-- 搜索栏 -->
         <Frame Grid.Row="1" Padding="5" CornerRadius="10" Margin="10" HasShadow="False" BorderColor="LightGray">
             <HorizontalStackLayout>
                 <Label Text="🔍" FontSize="20" Margin="5,0" />
-                <Entry Placeholder="Search for restaurants or dishes" ClearButtonVisibility="WhileEditing" />
+                <Entry x:Name="SearchEntry"
+                       Placeholder="Search for restaurants or dishes" 
+                       ClearButtonVisibility="WhileEditing"
+                       TextChanged="OnSearchTextChanged" />
             </HorizontalStackLayout>
         </Frame>
 
@@ -43,15 +51,15 @@
                     <SwipeView>
                         <SwipeView.RightItems>
                             <SwipeItems>
-                                <SwipeItem Text="Favorite" 
-                                           BackgroundColor="LightBlue"
+                                <SwipeItem Text="{Binding IsFavorite, Converter={StaticResource FavoriteTextConverter}}"
+                                           BackgroundColor="{Binding IsFavorite, Converter={StaticResource FavoriteColorConverter}}"
                                            Invoked="OnFavoriteSwipeInvoked" />
                             </SwipeItems>
                         </SwipeView.RightItems>
 
                         <Frame Padding="10" Margin="0,5" CornerRadius="15" BorderColor="LightGray" HasShadow="False">
                             <Grid ColumnDefinitions="80, *" RowDefinitions="Auto, Auto, Auto">
-                                <!-- 餐厅图片：用Frame包裹实现圆角 -->
+                                <!-- 餐厅图片 -->
                                 <Frame Grid.RowSpan="3" 
                                        WidthRequest="70" HeightRequest="70" 
                                        CornerRadius="10" Padding="0" 
@@ -70,7 +78,7 @@
                                        FontAttributes="Bold"
                                        Margin="5,0" />
 
-                                <!-- 评分和距离行 -->
+                                <!-- 评分和距离 -->
                                 <HorizontalStackLayout Grid.Row="1" Grid.Column="1" Spacing="15" Margin="5,0">
                                     <HorizontalStackLayout>
                                         <Label Text="⭐" />

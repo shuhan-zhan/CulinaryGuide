@@ -1,14 +1,51 @@
-﻿namespace CulinaryGuide.Models
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace CulinaryGuide.Models
 {
-    public class Restaurant
+    public class Restaurant : INotifyPropertyChanged
     {
+        private string _distance;
+        public int Id { get; set; }
         public string Name { get; set; }
         public double Rating { get; set; }
-        public string Distance { get; set; }
+        public string Distance
+        {
+            get => _distance;
+            set
+            {
+                if (_distance != value)
+                {
+                    _distance = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public string ShortAddress { get; set; }
         public string FullAddress { get; set; }
         public string Phone { get; set; }
-        public string ImageUrl { get; set; }   // 新增：图片文件名（不带扩展名）
-        public string FirstLetter { get; set; } // 可选，如果不使用首字母色块可删除
+        public string ImageUrl { get; set; }
+        public string FirstLetter { get; set; }
+        public double Latitude { get; set; }       // 餐厅纬度
+        public double Longitude { get; set; }      // 餐厅经度
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private bool _isFavorite;
+        public bool IsFavorite
+        {
+            get => _isFavorite;
+            set
+            {
+                if (_isFavorite != value)
+                {
+                    _isFavorite = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
     }
 }

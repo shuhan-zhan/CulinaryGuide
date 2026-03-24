@@ -1,43 +1,54 @@
 ﻿using CulinaryGuide.Models;
+using CulinaryGuide.Services;
 using Microsoft.Maui.Controls;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace CulinaryGuide.Pages
 {
     public partial class FavoritesPage : ContentPage
     {
-        public List<Restaurant> Favorites { get; set; }
+        public ObservableCollection<FavoriteRestaurant> Favorites { get; set; } = new();
 
         public FavoritesPage()
         {
             InitializeComponent();
-
-            // 模拟收藏数据（包含图片）
-            Favorites = new List<Restaurant>
-            {
-                new Restaurant
-                {
-                    Name = "McDonald's",
-                    ShortAddress = "120 Xuefu Road",
-                    ImageUrl = "restaurant3"   // 确保图片文件存在
-                },
-                new Restaurant
-                {
-                    Name = "Starbucks",
-                    ShortAddress = "100 Xuefu Road",
-                    ImageUrl = "restaurant2"
-                }
-            };
-
-            // 设置 BindingContext
             BindingContext = this;
         }
 
-        // 右滑“Remove”按钮的事件
-        private async void OnRemoveSwipeInvoked(object sender, System.EventArgs e)
+        protected override async void OnAppearing()
         {
-            // 获取被滑动的餐厅项（此处简化：实际需要获取具体项）
-            await DisplayAlert("Remove", "This item will be removed from favorites (demo).", "OK");
+            base.OnAppearing();
+            await LoadFavorites();
+        }
+
+        private async Task LoadFavorites()
+        {
+            var favorites = await App.Database.GetFavoritesAsync();
+            Favorites.Clear();
+            foreach (var fav in favorites)
+                Favorites.Add(fav);
+        }
+
+        private async void OnRemoveSwipeInvoked(object sender, EventArgs e)
+        {
+            var swipeItem = sender as SwipeItem;
+            var favorite = swipeItem.BindingContext as FavoriteRestaurant;
+            if (favorite != null)
+            {
+                await App.Database.RemoveFavoriteAsync(favorite.Id);
+                Favorites.Remove(favorite);
+            }
+        }
+        private async void OnFavoriteSelected(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.CurrentSelection.FirstOrDefault() is FavoriteRestaurant selectedFavorite)
+            {
+                // 传递餐厅名称到详情页
+                await Shell.Current.GoToAsync($"detail?name={selectedFavorite.Name}");
+                // 清除选中状态
+                ((CollectionView)sender).SelectedItem = null;
+            }
         }
     }
 }

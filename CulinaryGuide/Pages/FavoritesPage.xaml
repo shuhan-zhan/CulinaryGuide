@@ -6,9 +6,11 @@
 
     <Grid>
         <CollectionView x:Name="FavoritesCollectionView"
-                        ItemsSource="{Binding Favorites}"
-                        Margin="10"
-                        EmptyView="No favorite restaurants yet">
+                ItemsSource="{Binding Favorites}"
+                Margin="10"
+                EmptyView="No favorite restaurants yet"
+                SelectionMode="Single"
+                SelectionChanged="OnFavoriteSelected">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <SwipeView>
